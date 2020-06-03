@@ -6,7 +6,9 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -39,12 +41,13 @@ public class MainChatActivity extends AppCompatActivity {
         Log.d("FlashChat", "User id is: " + uid);
 
         // Link the Views in the layout to the Java code
-        mInputText = findViewById(R.id.messageInput);
-        ImageButton sendButton = findViewById(R.id.sendButton);
-        mChatListView = findViewById(R.id.chat_list_view);
+        mInputText = (EditText) findViewById(R.id.messageInput);
+        ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);
+        mChatListView = (ListView) findViewById(R.id.chat_list_view);
 
         // TODO: Send the message when the "enter" button is pressed
         mInputText.setOnEditorActionListener((v, actionId, event) -> {
+
             sendMessage();
             return true;
         });
@@ -56,12 +59,12 @@ public class MainChatActivity extends AppCompatActivity {
     }
 
     // TODO: Retrieve the display name from the Shared Preferences
-    private void setupDisplayName()
-    {
+    private void setupDisplayName(){
+
         SharedPreferences prefs = getSharedPreferences(RegisterActivity.CHAT_PREFS, MODE_PRIVATE);
         mDisplayName = prefs.getString(RegisterActivity.DISPLAY_NAME_KEY, null);
 
-        if(mDisplayName == null) mDisplayName = "Anonymous";
+        if (mDisplayName == null) mDisplayName = "Anonymous";
     }
 
 
@@ -79,8 +82,8 @@ public class MainChatActivity extends AppCompatActivity {
     }
 
     // TODO: Override the onStart() lifecycle method. Setup the adapter here.
-    public void onStart()
-    {
+    @Override
+    public void onStart() {
         super.onStart();
         mAdaptor = new ChatListAdaptor(this, mDatabaseReference, mDisplayName);
         mChatListView.setAdapter(mAdaptor);

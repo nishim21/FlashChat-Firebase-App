@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+
 import java.util.ArrayList;
 
 public class ChatListAdaptor extends BaseAdapter {
@@ -27,13 +29,13 @@ public class ChatListAdaptor extends BaseAdapter {
 
     private ChildEventListener mListener = new ChildEventListener() {
         @Override
-        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
             mSnapshotList.add(dataSnapshot);
             notifyDataSetChanged();
         }
 
         @Override
-        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
 
         }
 
@@ -43,7 +45,7 @@ public class ChatListAdaptor extends BaseAdapter {
         }
 
         @Override
-        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
         }
 
