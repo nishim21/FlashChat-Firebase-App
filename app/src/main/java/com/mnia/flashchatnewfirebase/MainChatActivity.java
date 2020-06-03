@@ -1,23 +1,17 @@
 package com.mnia.flashchatnewfirebase;
 
 import android.content.SharedPreferences;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mnia.flashchatnewfirebase.R;
 
 
 public class MainChatActivity extends AppCompatActivity {
@@ -26,8 +20,8 @@ public class MainChatActivity extends AppCompatActivity {
     private String mDisplayName;
     private ListView mChatListView;
     private EditText mInputText;
-    private ImageButton mSendButton;
     private DatabaseReference mDatabaseReference;
+    private ChatListAdaptor mAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,28 +32,26 @@ public class MainChatActivity extends AppCompatActivity {
         setupDisplayName();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        assert user != null;
+        UserInfo profile = user.getProviderData().get(0); // getting the first one bc this is a list
+        String uid = profile.getUid();
+        Log.d("FlashChat", "User id is: " + uid);
+
         // Link the Views in the layout to the Java code
-        mInputText = (EditText) findViewById(R.id.messageInput);
-        mSendButton = (ImageButton) findViewById(R.id.sendButton);
-        mChatListView = (ListView) findViewById(R.id.chat_list_view);
+        mInputText = findViewById(R.id.messageInput);
+        ImageButton sendButton = findViewById(R.id.sendButton);
+        mChatListView = findViewById(R.id.chat_list_view);
 
         // TODO: Send the message when the "enter" button is pressed
-        mInputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                sendMessage();
-                return true;
-            }
+        mInputText.setOnEditorActionListener((v, actionId, event) -> {
+            sendMessage();
+            return true;
         });
 
 
         // TODO: Add an OnClickListener to the sendButton to send a message
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
-            }
-        });
+        sendButton.setOnClickListener(v -> sendMessage());
 
     }
 
@@ -87,13 +79,19 @@ public class MainChatActivity extends AppCompatActivity {
     }
 
     // TODO: Override the onStart() lifecycle method. Setup the adapter here.
-
+    public void onStart()
+    {
+        super.onStart();
+        mAdaptor = new ChatListAdaptor(this, mDatabaseReference, mDisplayName);
+        mChatListView.setAdapter(mAdaptor);
+    }
 
     @Override
     public void onStop() {
         super.onStop();
 
         // TODO: Remove the Firebase event listener on the adapter.
+        mAdaptor.cleanup();
 
     }
 

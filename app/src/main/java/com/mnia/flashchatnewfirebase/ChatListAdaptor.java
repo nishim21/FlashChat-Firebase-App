@@ -2,17 +2,20 @@ package com.mnia.flashchatnewfirebase;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.ArrayList;
 
 public class ChatListAdaptor extends BaseAdapter {
@@ -22,10 +25,39 @@ public class ChatListAdaptor extends BaseAdapter {
     private Activity mActivity;
     private ArrayList<DataSnapshot> mSnapshotList;
 
+    private ChildEventListener mListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            mSnapshotList.add(dataSnapshot);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+        }
+    };
+
     public ChatListAdaptor(Activity activity, DatabaseReference ref, String name)
     {
         mActivity = activity;
         mDatabaseReference = ref.child("messages");
+        mDatabaseReference.addChildEventListener(mListener);
         mDisplayName = name;
         mSnapshotList = new ArrayList<>();
     }
@@ -39,12 +71,14 @@ public class ChatListAdaptor extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return mSnapshotList.size();
     }
 
     @Override
     public InstantMessage getItem(int position) {
-        return null;
+
+        DataSnapshot snapshot = mSnapshotList.get(position);
+        return snapshot.getValue(InstantMessage.class);
     }
 
     @Override
@@ -62,14 +96,17 @@ public class ChatListAdaptor extends BaseAdapter {
             convertView = inflater.inflate(R.layout.chat_msg_row, parent, false);
 
             final viewHolder holder = new viewHolder();
-            holder.authorName = (TextView) convertView.findViewById(R.id.author);
-            holder.body = (TextView) convertView.findViewById(R.id.message);
+            holder.authorName = convertView.findViewById(R.id.author);
+            holder.body = convertView.findViewById(R.id.message);
             holder.params = (LinearLayout.LayoutParams) holder.authorName.getLayoutParams();
             convertView.setTag(holder);
         }
 
         final InstantMessage message = getItem(position);
         final viewHolder holder = (viewHolder) convertView.getTag();
+
+        boolean isMe = message.getAuthor().equals(mDisplayName);
+        setChatRowAppearance(isMe, holder);
 
         String author = message.getAuthor();
         holder.authorName.setText(author);
@@ -78,5 +115,31 @@ public class ChatListAdaptor extends BaseAdapter {
         holder.body.setText(msg);
 
         return convertView;
+    }
+
+    private void setChatRowAppearance(boolean isItMe, viewHolder holder)
+    {
+        if(isItMe)
+        {
+            holder.params.gravity = Gravity.END;
+            holder.authorName.setTextColor(Color.GREEN);
+            holder.body.setBackgroundResource(R.drawable.bubble2);
+        }
+
+        else
+        {
+            holder.params.gravity = Gravity.START;
+            holder.authorName.setTextColor(Color.BLUE);
+            holder.body.setBackgroundResource(R.drawable.bubble1);
+        }
+
+        holder.authorName.setLayoutParams(holder.params);
+        holder.body.setLayoutParams(holder.params);
+
+    }
+
+    public void cleanup()
+    {
+        mDatabaseReference.removeEventListener(mListener);
     }
 }
