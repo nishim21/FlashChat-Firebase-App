@@ -1,6 +1,7 @@
 package com.mnia.flashchatnewfirebase;
 
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -23,7 +24,7 @@ public class MainChatActivity extends AppCompatActivity {
     private ListView mChatListView;
     private EditText mInputText;
     private DatabaseReference mDatabaseReference;
-    private ChatListAdaptor mAdaptor;
+    private ChatListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class MainChatActivity extends AppCompatActivity {
         String uid = profile.getUid();
         Log.d("FlashChat", "User id is: " + uid);
 
+
+
         // Link the Views in the layout to the Java code
         mInputText = (EditText) findViewById(R.id.messageInput);
         ImageButton sendButton = (ImageButton) findViewById(R.id.sendButton);
@@ -52,7 +55,6 @@ public class MainChatActivity extends AppCompatActivity {
             return true;
         });
 
-
         // TODO: Add an OnClickListener to the sendButton to send a message
         sendButton.setOnClickListener(v -> sendMessage());
 
@@ -62,39 +64,44 @@ public class MainChatActivity extends AppCompatActivity {
     private void setupDisplayName(){
 
         SharedPreferences prefs = getSharedPreferences(RegisterActivity.CHAT_PREFS, MODE_PRIVATE);
+
         mDisplayName = prefs.getString(RegisterActivity.DISPLAY_NAME_KEY, null);
 
-        if (mDisplayName == null) mDisplayName = "Anonymous";
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mDisplayName = user.getDisplayName();
+
     }
 
 
     private void sendMessage() {
-        Log.d("FlashChat", "I sent something!");
 
+        Log.d("FlashChat", "I sent something");
         // TODO: Grab the text the user typed in and push the message to Firebase
         String input = mInputText.getText().toString();
-
-        if(!input.equals("")) {
+        if (!input.equals("")) {
             InstantMessage chat = new InstantMessage(input, mDisplayName);
             mDatabaseReference.child("messages").push().setValue(chat);
+            MediaPlayer.create(this, R.raw.sent);
             mInputText.setText("");
         }
+
     }
 
     // TODO: Override the onStart() lifecycle method. Setup the adapter here.
     @Override
     public void onStart() {
         super.onStart();
-        mAdaptor = new ChatListAdaptor(this, mDatabaseReference, mDisplayName);
-        mChatListView.setAdapter(mAdaptor);
+        mAdapter = new ChatListAdapter(this, mDatabaseReference, mDisplayName);
+        mChatListView.setAdapter(mAdapter);
     }
+
 
     @Override
     public void onStop() {
         super.onStop();
 
         // TODO: Remove the Firebase event listener on the adapter.
-        mAdaptor.cleanup();
+        mAdapter.cleanup();
 
     }
 

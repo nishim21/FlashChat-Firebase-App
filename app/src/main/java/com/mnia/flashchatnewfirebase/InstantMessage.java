@@ -9,6 +9,10 @@ public class InstantMessage {
         this.author = author;
     }
 
+    public InstantMessage(){
+
+    }
+
     public String getMessage() {
         return message;
     }

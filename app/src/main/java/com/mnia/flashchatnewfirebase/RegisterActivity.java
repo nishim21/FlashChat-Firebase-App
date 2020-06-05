@@ -3,6 +3,8 @@ package com.mnia.flashchatnewfirebase;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,8 +12,15 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -145,18 +154,38 @@ public class RegisterActivity extends AppCompatActivity {
         String displayName = mUsernameView.getText().toString();
         SharedPreferences prefs = getSharedPreferences(CHAT_PREFS, 0);
         prefs.edit().putString(DISPLAY_NAME_KEY, displayName).apply();
-    }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        if(user!=null)
+        {
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(displayName)
+                    .build();
+
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("FlashChat", "User profile updated.");
+                            }
+                        }
+                    });
+        }
+
+    }
 
     // TODO: Create an alert dialog to show in case registration failed
     private void showErrorDialog()
     {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this, R.style.alertDialogTheme)
                 .setTitle("Oops!")
                 .setMessage("Registration attempt failed!")
                 .setPositiveButton(android.R.string.ok, null)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+
+        MediaPlayer.create(this, R.raw.alert);
     }
 
 }

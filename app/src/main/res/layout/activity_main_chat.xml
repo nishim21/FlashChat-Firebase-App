@@ -1,8 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/bg26"
+    android:fadeScrollbars="true"
+    android:isScrollContainer="false"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -40,8 +43,8 @@
             android:importantForAutofill="no"
             android:inputType="textCapSentences|textAutoCorrect"
             android:maxLines="1"
-            android:textColor="#99A7FA"
-            android:textColorHint="#C3CAF4" />
+            android:textColor="#153330"
+            android:textColorHint="#801D4743" />
 
         <ImageButton
             android:id="@+id/sendButton"

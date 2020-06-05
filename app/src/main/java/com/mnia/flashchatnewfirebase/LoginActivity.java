@@ -2,6 +2,7 @@ package com.mnia.flashchatnewfirebase;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -65,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(this, "Login in progress...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Logging in...", Toast.LENGTH_SHORT).show();
         }
 
         // TODO: Use FirebaseAuth to sign in with email & password
@@ -90,12 +91,14 @@ public class LoginActivity extends AppCompatActivity {
     // TODO: Show error on screen with an alert dialog
     private void showErrorDialog()
     {
-        new AlertDialog.Builder(this)
+        new AlertDialog.Builder(this, R.style.alertDialogTheme)
                 .setTitle("Oops!")
                 .setPositiveButton(android.R.string.ok, null)
                 .setMessage("There was a problem signing in!")
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+
+        MediaPlayer.create(this, R.raw.alert).start();
     }
 
 }

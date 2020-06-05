@@ -20,18 +20,20 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
-public class ChatListAdaptor extends BaseAdapter {
+public class ChatListAdapter extends BaseAdapter {
 
-    private String mDisplayName;
-    private DatabaseReference mDatabaseReference;
     private Activity mActivity;
+    private DatabaseReference mDatabaseReference;
+    private String mDisplayName;
     private ArrayList<DataSnapshot> mSnapshotList;
 
     private ChildEventListener mListener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
+
             mSnapshotList.add(dataSnapshot);
             notifyDataSetChanged();
+
         }
 
         @Override
@@ -55,17 +57,18 @@ public class ChatListAdaptor extends BaseAdapter {
         }
     };
 
-    public ChatListAdaptor(Activity activity, DatabaseReference ref, String name)
-    {
+    public ChatListAdapter(Activity activity, DatabaseReference ref, String name) {
+
         mActivity = activity;
+        mDisplayName = name;
+        // common error: typo in the db location. Needs to match what's in MainChatActivity.
         mDatabaseReference = ref.child("messages");
         mDatabaseReference.addChildEventListener(mListener);
-        mDisplayName = name;
+
         mSnapshotList = new ArrayList<>();
     }
 
-    static class viewHolder
-    {
+    private static class ViewHolder{
         TextView authorName;
         TextView body;
         LinearLayout.LayoutParams params;
@@ -91,21 +94,21 @@ public class ChatListAdaptor extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null)
-        {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             assert inflater != null;
             convertView = inflater.inflate(R.layout.chat_msg_row, parent, false);
 
-            final viewHolder holder = new viewHolder();
+            final ViewHolder holder = new ViewHolder();
             holder.authorName = convertView.findViewById(R.id.author);
             holder.body = convertView.findViewById(R.id.message);
             holder.params = (LinearLayout.LayoutParams) holder.authorName.getLayoutParams();
             convertView.setTag(holder);
+
         }
 
         final InstantMessage message = getItem(position);
-        final viewHolder holder = (viewHolder) convertView.getTag();
+        final ViewHolder holder = (ViewHolder) convertView.getTag();
 
         boolean isMe = message.getAuthor().equals(mDisplayName);
         setChatRowAppearance(isMe, holder);
@@ -119,20 +122,30 @@ public class ChatListAdaptor extends BaseAdapter {
         return convertView;
     }
 
-    private void setChatRowAppearance(boolean isItMe, viewHolder holder)
-    {
-        if(isItMe)
+    private void setChatRowAppearance(boolean isItMe, ViewHolder holder) {
+
+        if (isItMe)
         {
+
             holder.params.gravity = Gravity.END;
-            holder.authorName.setTextColor(Color.GREEN);
+            holder.authorName.setTextColor(Color.parseColor("#183A37"));
+
+            // If you want to use colours from colors.xml
+            // int colourAsARGB = ContextCompat.getColor(mActivity.getApplicationContext(), R.color.yellow);
+            // holder.authorName.setTextColor(colourAsARGB);
+
             holder.body.setBackgroundResource(R.drawable.bubble2);
+            holder.body.setAlpha((float) 0.60);
+            holder.body.setTextColor(Color.parseColor("#2C6560"));
         }
 
         else
         {
             holder.params.gravity = Gravity.START;
-            holder.authorName.setTextColor(Color.BLUE);
+            holder.authorName.setTextColor(Color.parseColor("#192251"));
             holder.body.setBackgroundResource(R.drawable.bubble1);
+            holder.body.setAlpha((float) 0.60);
+            holder.body.setTextColor(Color.parseColor("#1D377A"));
         }
 
         holder.authorName.setLayoutParams(holder.params);
@@ -140,8 +153,9 @@ public class ChatListAdaptor extends BaseAdapter {
 
     }
 
-    public void cleanup()
-    {
+
+    void cleanup() {
+
         mDatabaseReference.removeEventListener(mListener);
     }
 }

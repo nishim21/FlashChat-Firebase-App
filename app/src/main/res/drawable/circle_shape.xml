@@ -8,12 +8,12 @@
         <shape android:shape="oval">
 
             <gradient
-                android:startColor="#0D4325"
-                android:endColor="#257145" />
+                android:startColor="#125049"
+                android:endColor="#27877E" />
 
             <stroke
                 android:width="0.1dp"
-                android:color="@color/light_green" />
+                android:color="#015950" />
 
         </shape>
     </item>
@@ -25,12 +25,12 @@
         <shape android:shape="oval">
 
             <gradient
-                android:startColor="#0D4325"
-                android:endColor="#257145" />
+                android:startColor="#125049"
+                android:endColor="#27877E" />
 
             <stroke
                 android:width="0.1dp"
-                android:color="@color/light_green" />
+                android:color="#015950" />
 
         </shape>
     </item>
@@ -40,12 +40,12 @@
         <shape android:shape="oval">
 
             <gradient
-                android:startColor="@color/green"
-                android:endColor="@color/light_green" />
+                android:startColor="#0C332F"
+                android:endColor="#134944" />
 
             <stroke
                 android:width="0.1dp"
-                android:color="@color/light_green" />
+                android:color="#015950" />
 
         </shape>
     </item>

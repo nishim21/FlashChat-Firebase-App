@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg23"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -16,7 +17,9 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/text_hint_green">
+        android:textColorHint="@color/text_hint_green"
+        app:boxStrokeColor="@color/button_green"
+        app:boxBackgroundColor="@color/button_green">
 
         <AutoCompleteTextView
             android:id="@+id/register_username"
@@ -30,14 +33,17 @@
             android:textColorHint="#804AA581"
             android:textIsSelectable="false"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:outlineAmbientShadowColor="@color/button_green" tools:targetApi="p"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/text_hint_green">
+        android:textColorHint="@color/text_hint_green"
+        app:boxStrokeColor="@color/button_green"
+        app:boxBackgroundColor="@color/button_green">
 
         <AutoCompleteTextView
             android:id="@+id/register_email"
@@ -51,14 +57,17 @@
             android:textColorHint="#804AA581"
             android:textIsSelectable="false"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:outlineAmbientShadowColor="@color/button_green" tools:targetApi="p"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/text_hint_green">
+        android:textColorHint="@color/text_hint_green"
+        app:boxStrokeColor="@color/button_green"
+        app:boxBackgroundColor="@color/button_green">
 
         <EditText
             android:id="@+id/register_password"
@@ -72,14 +81,17 @@
             android:textColor="#80FFFFFF"
             android:textColorHint="#804AA581"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:outlineAmbientShadowColor="@color/button_green" tools:targetApi="p"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColorHint="@color/text_hint_green">
+        android:textColorHint="@color/text_hint_green"
+        app:boxStrokeColor="@color/button_green"
+        app:boxBackgroundColor="@color/button_green">
 
         <EditText
             android:id="@+id/register_confirm_password"
@@ -95,7 +107,8 @@
             android:textColor="#80FFFFFF"
             android:textColorHint="#804AA581"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:outlineAmbientShadowColor="@color/button_green" tools:targetApi="p"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
