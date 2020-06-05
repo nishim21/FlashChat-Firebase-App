@@ -185,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
 
-        MediaPlayer.create(this, R.raw.alert);
+        MediaPlayer.create(this, R.raw.alert).start();
     }
 
 }

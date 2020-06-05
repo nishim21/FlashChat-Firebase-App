@@ -17,6 +17,7 @@
         <item name="background">@drawable/alert_dialog_bg</item>
         <item name="android:textColor">#0E6E65</item>
         <item name="strokeColor">#800E5E56</item>
+        <item name="android:textColorPrimary">#0E6E65</item>
     </style>
 
 

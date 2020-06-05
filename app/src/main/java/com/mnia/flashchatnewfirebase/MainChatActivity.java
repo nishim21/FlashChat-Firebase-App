@@ -81,7 +81,7 @@ public class MainChatActivity extends AppCompatActivity {
         if (!input.equals("")) {
             InstantMessage chat = new InstantMessage(input, mDisplayName);
             mDatabaseReference.child("messages").push().setValue(chat);
-            MediaPlayer.create(this, R.raw.sent);
+            MediaPlayer.create(this, R.raw.sent).start();
             mInputText.setText("");
         }
 
