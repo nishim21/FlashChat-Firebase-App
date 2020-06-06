@@ -4,4 +4,4 @@ This app requires authentication through Email ID and password registered by the
 While registering, username, Email ID and password are required to be entered by the user.
 After logging in, the user can send text messages to the other users who are using the same app in a virtual chat room.
 The users' information and messages are stored at firebase real-time database.
-The app supports multiple users to send and receive messages in real-time.
+Create your own firebase database and add it your app!
